@@ -49,9 +49,25 @@ bot.command('leaderboard', (ctx) => {
   ctx.reply(['🏆 Leaderboard', ...lines].join('\n'));
 });
 
-bot.launch().then(() => console.log('Bot launched'));
+// IMPORTANT: catch launch errors so a Telegram polling conflict (409)
+// does NOT crash the whole server. The game server (Express + Socket.io)
+// must keep running even if the bot itself fails to start.
+bot
+  .launch({ dropPendingUpdates: true })
+  .then(() => console.log('Bot launched'))
+  .catch((err) => {
+    console.error('Bot launch failed (server will still run):', err.message);
+    console.error('This usually means the same BOT_TOKEN is already running elsewhere.');
+    console.error('Check: other Railway services, Render, or a local `npm start` using the same token.');
+  });
+
 process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));
+
+// Extra safety net: never let an unexpected error silently kill the process.
+process.on('unhandledRejection', (err) => {
+  console.error('Unhandled rejection (server will still run):', err);
+});
 
 // ---- Telegram WebApp initData verification ----
 // This proves the request really came from Telegram for a real user,
