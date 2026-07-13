@@ -25,7 +25,7 @@ function showScreen(name) {
 }
 
 // ---- Socket connection ----
-const socket = io(BACKEND_URL, { transports: ['websocket'] });
+const socket = io(BACKEND_URL);
 
 let myUserId = null;
 let currentRoomId = null;
