@@ -1,6 +1,6 @@
 // ---- CONFIG ----
 // Replace this with your deployed backend URL (e.g. https://your-backend.onrender.com)
-const BACKEND_URL = 'telegram-game-app-production.up.railway.app';
+const BACKEND_URL = 'https://telegram-game-app-production.up.railway.app';
 
 // ---- Telegram init ----
 const tg = window.Telegram?.WebApp;
